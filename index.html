@@ -1859,161 +1859,62 @@
         </div>
     </footer>
 
-    <script>
-        // Header scroll effect
-        window.addEventListener('scroll', function() {
-            const header = document.getElementById('header');
-            header.classList.toggle('scrolled', window.scrollY > 50);
-        });
-
-        // Mobile menu functionality
+       <script>
+        // Simple JavaScript for mobile menu
         const menuToggle = document.getElementById('menuToggle');
         const mobileMenu = document.getElementById('mobileMenu');
         const overlay = document.getElementById('overlay');
 
-        function toggleMobileMenu() {
-            const isActive = menuToggle.classList.toggle('active');
-            mobileMenu.classList.toggle('active', isActive);
-            overlay.classList.toggle('active', isActive);
-            document.body.style.overflow = isActive ? 'hidden' : '';
-        }
-
-        menuToggle.addEventListener('click', toggleMobileMenu);
-        overlay.addEventListener('click', toggleMobileMenu);
-
-        // Close mobile menu when clicking links
-        document.querySelectorAll('.mobile-menu a').forEach(link => {
-            link.addEventListener('click', toggleMobileMenu);
-        });
-
-        // Auth button handlers
-        document.querySelectorAll('.sign-in, .mobile-sign-in').forEach(btn => {
-            btn.addEventListener('click', () => alert('Sign in functionality'));
-        });
-
-        document.querySelectorAll('.sign-up, .mobile-sign-up').forEach(btn => {
-            btn.addEventListener('click', () => alert('Sign up functionality'));
-        });
-
-        // Smooth scroll for navigation
-        document.querySelectorAll('nav a, .mobile-menu a').forEach(link => {
-            link.addEventListener('click', (e) => {
-                e.preventDefault();
-                const target = document.querySelector(e.target.getAttribute('href'));
-                target?.scrollIntoView({ behavior: 'smooth' });
-            });
-        });
-
-        // Button interactions with loading states
-        document.querySelectorAll('.btn-primary').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const originalText = this.textContent;
-                this.innerHTML = '<span class="loading"></span>';
-                this.disabled = true;
-                
-                setTimeout(() => {
-                    this.textContent = originalText;
-                    this.disabled = false;
-                    alert('Welcome! Let\'s get started with our web services.');
-                }, 1500);
-            });
-        });
-
-        document.querySelectorAll('.btn-secondary, .explore-btn').forEach(btn => {
-            btn.addEventListener('click', () => alert('Explore our web services.'));
-        });
-
-        // Testimonials functionality
-        const testimonialCards = document.querySelectorAll('.testimonial-card');
-        const navDots = document.querySelectorAll('.dot');
-        let currentTestimonial = 0;
-        let testimonialInterval;
-
-        function showTestimonial(index) {
-            testimonialCards.forEach((card, i) => {
-                card.classList.toggle('active', i === index);
-                card.style.display = i === index ? 'grid' : 'none';
-            });
+        // Toggle mobile menu
+        menuToggle.addEventListener('click', function() {
+            menuToggle.classList.toggle('active');
+            mobileMenu.classList.toggle('active');
+            overlay.classList.toggle('active');
             
-            navDots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-            currentTestimonial = index;
-        }
+            // Prevent body scroll when menu is open
+            if (mobileMenu.classList.contains('active')) {
+                document.body.style.overflow = 'hidden';
+            } else {
+                document.body.style.overflow = '';
+            }
+        });
 
-        // Initialize testimonials
-        navDots.forEach((dot, index) => {
-            dot.addEventListener('click', () => {
-                showTestimonial(index);
-                resetTestimonialInterval();
+        // Close menu when clicking overlay
+        overlay.addEventListener('click', function() {
+            menuToggle.classList.remove('active');
+            mobileMenu.classList.remove('active');
+            overlay.classList.remove('active');
+            document.body.style.overflow = '';
+        });
+
+        // Close menu when clicking links
+        const mobileLinks = document.querySelectorAll('.mobile-menu a');
+        mobileLinks.forEach(function(link) {
+            link.addEventListener('click', function() {
+                menuToggle.classList.remove('active');
+                mobileMenu.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
             });
         });
 
-        function resetTestimonialInterval() {
-            clearInterval(testimonialInterval);
-            testimonialInterval = setInterval(() => {
-                showTestimonial((currentTestimonial + 1) % testimonialCards.length);
-            }, 8000);
-        }
-
-        // FAQ functionality
-        document.querySelectorAll('.faq-item').forEach(item => {
-            item.querySelector('.faq-question').addEventListener('click', () => {
-                const isActive = item.classList.contains('active');
-                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
-                if (!isActive) item.classList.add('active');
-            });
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('header');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
         });
 
-        // Pricing card animations
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.opacity = '1';
-                }
-            });
-        }, { threshold: 0.1 });
-
-        document.querySelectorAll('.pricing-card, .feature-card').forEach(card => {
-            observer.observe(card);
-        });
-
-        // Schedule demo button
-        document.querySelector('.schedule-btn').addEventListener('click', () => {
-            alert('Schedule demo functionality - redirect to booking page');
-        });
-
-        // Service cards animation on load
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.service-card').forEach((card, index) => {
-                card.style.opacity = '0';
-                card.style.transform = 'translateY(20px)';
-                setTimeout(() => {
-                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
-                    card.style.opacity = '1';
-                    card.style.transform = 'translateY(0)';
-                }, index * 100);
-            });
-            
-            // Start testimonial rotation
-            resetTestimonialInterval();
-        });
-
-        // Client logo hover effects
-        document.querySelectorAll('.client-logo').forEach(logo => {
-            logo.addEventListener('mouseenter', () => {
-                logo.style.transform = 'translateY(-3px)';
-            });
-            logo.addEventListener('mouseleave', () => {
-                logo.style.transform = 'translateY(0)';
-            });
-        });
-
-        // CTA button interactions
-        document.querySelectorAll('.cta-button').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const plan = this.closest('.pricing-card').querySelector('.plan-name').textContent;
-                alert(`Requesting demo for: ${plan}`);
+        // Simple button alerts
+        document.querySelectorAll('.btn-primary, .btn-secondary, .sign-in, .sign-up, .mobile-sign-in, .mobile-sign-up').forEach(function(button) {
+            button.addEventListener('click', function() {
+                alert('Button clicked: ' + this.textContent);
             });
         });
     </script>
 </body>
+
 </html>
